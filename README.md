@@ -41,7 +41,7 @@ The Python files of the Web-UI are located in */kubernetes/web-ui/app/applicatio
 ### Web-UI
 
  1. Replace the build and push registries by desired registries in /software/kubernetes/web-ui/deploy_local_code.sh*. It should look like this <registry:tag>
-2. Execute the script from step 1 (sudo migh be needed). This builds and puses the Web-UI image to the desired registry.
+2. Execute the script from step 1 (sudo migh be needed). This builds and puhses the Web-UI image to the desired registry.
  3. Reference the pushed image in the Helm chart of the Web-UI: */software/kubernetes/web-ui/helm-flask/values.yaml* (line 8-9). Again in the form: <registry:tag>
 
 ### API-server
