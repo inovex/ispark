@@ -1,0 +1,30 @@
+{% import "form_macros.html" as forms %}
+
+<script type="text/javascript" src="/static/script/jquery-3.4.1.min.js">
+$('#modal-modify-resources').on('show.bs.modal', function () {
+    $('.classFromElement').on('click', function (e) {
+        e.preventDefault();
+        alert('hello world');
+    });
+})
+</script>
+
+<form id="modify-resources-form" action="#" method="POST">
+    <div class="tab-content" id="nav-tabContent">
+        <div id="environment-tab" class="tab-pane fade show active" role="tabpanel" aria-labelledby="modify-res">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="">
+                        {{ form.csrf_token }}
+                        {% for field in form.modifyRessources %}
+                            {{ forms.renderField(field) }}
+                        {% endfor %}
+                    </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+

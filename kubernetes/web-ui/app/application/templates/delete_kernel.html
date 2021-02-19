@@ -1,0 +1,5 @@
+{% import "form_macros.html" as forms %}
+Are you sure you want to delete this kernel?
+<form id="delete-kernel-form" action="#" method="POST">
+    {{ form.csrf_token }}
+</form>

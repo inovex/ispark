@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Flask Login</title>
+   <!-- <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="/static/style/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style/bootstrap/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="/static/style/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/style/style.css">
+    <link rel="stylesheet" href="/static/style/style.css">
+
+    {% block flask_includes %}
+    {% endblock flask_includes %}
+
+    {% block css %} {% endblock css %}
+</head>
+<body>
+<nav id="topnav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/"><h1>iSpark</h1></a>
+</nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        {% if category=='danger' %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">{{ message }}</div>
+        {% else %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}</div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">Please, provide your credentials.</div>
+    {% endif %}
+    {% endwith %}
+
+    {%if form.errors %}
+    <ul class="alert alert-danger">
+      {% for field, errors in form.errors.items() %}
+        <li>{{field}} {% for error in errors %}{{ error }}{% endfor %}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+<div style="width:1000px; margin-right:auto; margin-left:auto;">
+    <form action="{{ url_for('simplelogin.login') }}" method="post">
+      {{ form.csrf_token }}
+      {{form.username.label}}<div class="col-1">{{ form.username }}</div><br>
+      {{form.password.label}}<div class="col-1"> {{ form.password }}</div><br>
+      {% if next %}<input type="hidden" name="next" value="{{next}}">{% endif %}
+     <input type="submit" class="btn btn-info" value="Log in">
+    </form>
+</div>
+</body>
+</html>

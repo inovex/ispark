@@ -1,0 +1,255 @@
+body{
+    font-family: 'Lato', sans-serif;
+}
+
+textarea {
+  width:100%;
+  height: 175px;
+}
+
+h1 {
+    color:  #003c7e;
+}
+
+h2 {
+    color:  #c3d77b;
+}
+
+a {
+    color: #003c7e;
+}
+
+.btn-primary{
+    border-color: #003c7e;
+    background-color: #003c7e;
+}
+
+.btn-logout{
+    border-color: #f58f73;
+    background-color: f2a18a;
+}
+
+.btn-outline-primary {
+    color: #003c7e;
+    border-color: #003c7e;
+}
+
+.nav-link .oi{
+    top: .125em !important;
+    padding-right: .25em;
+}
+
+.button-number__controls {
+    padding: .125em 0;
+}
+
+.button-number {
+    display: block;
+    padding: .1em;
+}
+
+.bg-success {
+    background-color:  #aeca4d;
+}
+
+.progress-bar{
+    background-color: #003c7e;
+}
+/* Flash messages */
+.alert,
+.alert-info {
+    background: #3069aa;
+    color: #FFFFFF;
+}
+
+.alert-warning {
+    background: #FBC02D;
+    color: #FFFFFF;
+}
+
+.alert-success {
+    background-color:  #aeca4d;
+    color: #FFFFFF;
+}
+
+.alert-error {
+    background-color:  #E00051;
+    color: #FFFFFF;
+}
+
+.breadcrumb {
+    border-radius: 0;
+}
+/* Topnav Styling */
+
+
+/* Sidebar Styling */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#content-wrapper {
+    width: 100%;
+}
+
+#content {
+    padding-left: 2rem;
+}
+
+#sidebar {
+    min-width: 320px;
+    max-width: 320px;
+    min-height: 100vh;
+    /*margin-right: 50px;*/
+
+    border-right: 1px solid #ced4da;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -320px;
+}
+
+nav#sidebar ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* fonts and colors */
+nav#sidebar ul li a{
+    line-height: 3rem;
+    font-size: 16px;
+    font-weight: 500;
+    color: #616161;
+}
+
+nav#sidebar ul li a:hover{
+    background-color: #E0E0E0;
+    text-decoration: none;
+}
+nav#sidebar ul li a.active{
+    background-color: #aeca4d;
+    color: white;
+    text-decoration: none;
+}
+
+nav#sidebar > ul > li > a {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #003c7e;
+}
+
+nav#sidebar > ul > li > div > ul > li > a {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+/* paddings */
+nav#sidebar ul li{
+    margin: 0;
+    padding: 0; 
+}
+
+nav#sidebar ul li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-left: 1rem; 
+}
+
+nav#sidebar > ul > li > div > ul > li > a{
+    padding-left: 3rem;
+}
+
+nav#sidebar > ul > li > div > ul > li > div > ul > li > a{
+    padding-left: 5rem;
+}
+
+nav#sidebar > ul > li > div > ul > li > div > ul > li > div > ul > li > a{
+    padding-left: 7rem;
+}
+
+
+/* Arrow Styling */
+
+nav#sidebar ul li a[aria-expanded="false"]::before{
+    content: "\25B8\00A0\00A0\00A0";
+}
+
+nav#sidebar ul li a[aria-expanded="true"]::before{
+    content: "\25BE\00A0\00A0\00A0";
+}
+
+/* sidebar Header */
+nav#sidebar .sidebar-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    line-height: 1.5;
+
+    padding: .75rem 1rem; 
+
+    background-color: #e9ecef;
+}
+
+nav#sidebar .sidebar-header h6{
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #003c7e;
+}
+
+#sidebarCollapse{
+    display: inline;
+    font-size: .5rem;
+    border: 1px solid #003c7e;
+}
+
+#sidebarCollapse.active{
+}
+
+/* Accordion Overrides */
+.accordion .card-header button[aria-expanded="false"]{
+    color: rgba(0,0,0,.5);
+}
+
+.accordion .card-header button[aria-expanded="false"]::before{
+    content: "\25B8\00A0\00A0\00A0";
+    box-shadow: 0;
+}
+
+.accordion .card-header button[aria-expanded="true"]::before{
+    content: "\25BE\00A0\00A0\00A0";
+    
+}
+
+.accordion .card-header button{
+    box-shadow: none;
+}
+
+.invalid-feedback{
+    display: inherit;
+}
+
+right { float:right; }
+
+#progressbar-new {
+  background-color: black;
+  border-radius: 13px;
+  /* (height of inner div) / 2 + padding */
+  padding: 3px;
+}
+
+#progressbar-new>div {
+  background-color: orange;
+  width: 40%;
+  /* Adjust with JavaScript */
+  height: 20px;
+  border-radius: 10px;
+}

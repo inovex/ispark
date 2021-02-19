@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% set active_page = 'new' -%}
+{% import "form_macros.html" as forms %}
+
+{% block title %}New Kernel{% endblock title %}
+
+{% block content %}
+{{ super() }}
+
+<script type="text/javascript">
+
+function showAddSuccess() {
+
+    document.getElementById("message_add").hidden = false;
+
+}
+
+window.onload = function(){
+
+  document.getElementById("driver_memory").setAttribute('value',{{ rules_json['clusterResourceRules-defaultDriverMemory'] }});
+  document.getElementById("num_executors").setAttribute('value',{{ rules_json['clusterResourceRules-defaultNumExecutors'] }});
+  document.getElementById("executor_memory").setAttribute('value',{{ rules_json['clusterResourceRules-defaultExecutorMemory'] }});
+  document.getElementById("executor_cores").setAttribute('value',{{ rules_json['clusterResourceRules-defaultExecutorCores'] }});
+  var checkbox_bool = "{{ rules_json['allow_users'] }}"
+
+  if (checkbox_bool == "False"){
+      document.getElementById("driver_memory").readOnly = true;
+      document.getElementById("num_executors").readOnly = true;
+      document.getElementById("executor_memory").readOnly = true;
+      document.getElementById("executor_cores").readOnly = true;
+      }
+
+  }
+</script>
+
+<div id="message_add" hidden="true">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      Please wait, it may take up to a few minutes. You will be redirected as soon as adding is finished...
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+</div>
+
+
+<h1 class="text-center my-1 mb-3">Add new kernel for Jupyter EG</h1>
+
+
+<nav>
+  <div class="nav nav-tabs flex-column flex-sm-row mb-3" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active flex-sm-fill text-sm-center" id="add_kernel" data-toggle="tab" href="#environment-tab" role="tab" aria-controls="environment-tab" aria-selected="true">Environment</a>
+  </div>
+</nav>
+<form id="new-form" action="#" method="POST">
+    <div class="tab-content" id="nav-tabContent">
+        <div id="environment-tab" class="tab-pane fade show active" role="tabpanel" aria-labelledby="add_kernel">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="">
+                        {{ form.csrf_token }}
+                        {% for field in form.kernelEnvironment %}
+                            {{ forms.renderField(field) }}
+                        {% endfor %}
+                    </div>
+                    <div class="nav-pills">
+                        <input id="add_submit_button" onclick="showAddSuccess()" type="submit" value="Submit" class="btn btn-success my-1 float-right">                    </div>
+                    </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<div id="alert-success" class="row d-none">
+    <div class="col-1"></div>
+    <div class="alert alert-success col-10" role="alert">
+      <h4 class="alert-heading">Kernel added successfully</h4>
+      <!--
+      <p>Please leave this browser window open while your file is still uploading.</p>
+      <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      -->
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock content %}
+

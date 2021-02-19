@@ -1,0 +1,159 @@
+{% extends "base_kernels.html" %}
+{% block title %}Kernel Details{% endblock title %}
+
+{% block inner_content %}
+
+{{ super() }}
+
+<style>
+table, th, td {
+  border-bottom: solid 3px #003c7e;
+  padding: 10px;
+}
+</style>
+
+<h1 class="my-3">Cluster overview</h1>
+
+
+<div class="row" >
+  <div class="column">
+      <h3 class="my-3">General info</h3>
+    <div class="row">
+      {% for i in range(0, cluster_info|length) %}
+        <div class="col-lg-4"> <b>{{ cluster_info_headers[i] }}</b> </div>
+        <div class="col-lg-4">{{ cluster_info[i] }}</div>
+
+          </div><div class="row">
+
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      {% for i in range(0, cluster_info|length) %}
+        <div class="col-lg-4"> <b>{{ cluster_scheduler_headers[i] }}</b> </div>
+        <div class="col-lg-4">{{ cluster_scheduler[i] }}</div>
+
+          </div><div class="row">
+
+      {% endfor %}
+    </div>
+
+    <h3 class="my-3">Metrics</h3>
+
+    <div class="row">
+      {% for i in range(0, cluster_metrics|length) %}
+        <div class="col-lg-4"> <b>{{ cluster_metrics_headers[i] }}</b> </div>
+        <div class="col-lg-4">{{ cluster_metrics[i] }}</div>
+
+          </div><div class="row">
+
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <div class="column">
+      <h3 class="my-2">Nodes</h3>
+        {% for i in range(0, num_nodes) %}
+        <h4 class="my-2">Node {{ i + 1 }} </h4>
+            {% for j in range(0, (cluster_nodes_headers|length)-2) %}
+            <div class="column"> <b>{{ cluster_nodes_headers[j] }}</b> </div>
+            <div class="column">{{ cluster_nodes[i][j] }}</div>
+            {% endfor %}
+            <div class="column"> <b>{{ cluster_nodes_headers[cluster_nodes_headers|length-2] }}</b> </div>
+            <progress value="{{ (cluster_nodes[i][cluster_nodes|length-5]/(cluster_nodes[i][cluster_nodes|length-6]+cluster_nodes[i][cluster_nodes|length-5]))*100 }}"  max="100"></progress>{{ cluster_nodes[i][(cluster_nodes|length)-5] }} / {{ cluster_nodes[i][(cluster_nodes|length)-6] + cluster_nodes[i][(cluster_nodes|length)-5] }} MB  (--Free: {{ cluster_nodes[i][(cluster_nodes|length)-6] }} MB)
+            <div class="column"> <b>{{ cluster_nodes_headers[cluster_nodes_headers|length-1] }}</b> </div>
+            <progress value="{{ (cluster_nodes[i][cluster_nodes|length-3]/(cluster_nodes[i][cluster_nodes|length-4]+cluster_nodes[i][cluster_nodes|length-3]))*100  }}"  max="100"></progress>{{ cluster_nodes[i][(cluster_nodes|length)-3] }} / {{ cluster_nodes[i][(cluster_nodes|length)-4] + cluster_nodes[i][(cluster_nodes|length)-3] }} vCPUs  (--Free: {{ cluster_nodes[i][(cluster_nodes|length)-4] }} vCPUs)
+      {% endfor %}
+      </div>
+</div>
+
+<div>
+<div class="row" >
+  <div class="column">
+      <h3 class="my-3">Applications</h3>
+  </div>
+</div>
+
+
+<table style="width:100%">
+    <tr>
+      <th>Logs</th>
+      {% for i in range(0, cluster_apps_headers|length) %}
+      <th>{{ cluster_apps_headers[i] }}</th>
+      {% endfor %}
+  </tr>
+  {% for i in range(0, cluster_apps|length) %}
+    {% for j in range(0, cluster_apps[i]|length) %}
+  <tr>
+        {% for k in range(0, cluster_apps[i][j]|length) %}
+                {% if k==0 and cluster_apps[i][j][k] != '-'  %}
+                    <td><a href="#" data-toggle="modal" data-target="#modal-show-logs-yarn" data-application_id="{{ cluster_apps[i][j][k] }}">Logs</a></td>
+              {% endif %}
+            {% if k==4 and cluster_apps[i][j][k] == 'RUNNING' and cluster_apps[i][j][1] == get_username()|lower %}
+            <td style="background-color:#BDF4B6" > {{ cluster_apps[i][j][k] }} <a href="#" data-toggle="modal" data-target="#modal-stop-application-yarn" data-application_id="{{ cluster_apps[i][j][0] }}" style="color:red">KILL</a></td>
+
+            {% elif k==4 and cluster_apps[i][j][k] == 'RUNNING' and 'Admin' == get_username() %}
+                 <td style="background-color:#46BAFB"> {{ cluster_apps[i][j][k] }} <a href="#" data-toggle="modal" data-target="#modal-stop-application-yarn" data-application_id="{{ cluster_apps[i][j][0] }}" style="color:red">KILL</a></td>
+
+            {% elif k==4 and cluster_apps[i][j][k] == 'RUNNING' %}
+                <td style="background-color:#46BAFB" > {{ cluster_apps[i][j][k] }} </td>
+
+            {% else %}
+                <td> {{ cluster_apps[i][j][k] }} </td>
+
+            {% endif %}
+
+
+
+         {% endfor %}
+
+  </tr>
+    {% endfor %}
+  {% endfor %}
+</table>
+
+
+
+<!-- logs -->
+<div id="modal-show-logs-yarn" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Logs...</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Please wait...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- kill -->
+<div id="modal-stop-application-yarn" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Kill this application?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Please wait...</p>
+      </div>
+       <div class="modal-footer">
+        <button href="."  id="modal-stop-application-yarn-button" type="button" class="btn btn-success" data-application_id="{{ application_id }}">Kill</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock inner_content %}
+
+
+

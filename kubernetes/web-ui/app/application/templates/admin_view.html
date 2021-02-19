@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% set active_page = 'new' -%}
+{% import "form_macros.html" as forms %}
+{% block title %}New Kernel{% endblock title %}
+
+{% block content %}
+{{ super() }}
+
+
+<script type="text/javascript">
+window.onload = function(){
+  document.getElementById("allowed_num_kernels").setAttribute('value',{{ rules_json['clusterResourceRules-allowedKernelsNumber'] }});
+  document.getElementById("allowed_driver_memory").setAttribute('value',{{ rules_json['clusterResourceRules-allowedDriverMemory'] }});
+  document.getElementById("allowed_num_executors").setAttribute('value',{{ rules_json['clusterResourceRules-allowedNumExecutors'] }});
+  document.getElementById("allowed_executor_memory").setAttribute('value',{{ rules_json['clusterResourceRules-allowedExecutorMemory'] }});
+  document.getElementById("allowed_executor_cores").setAttribute('value',{{ rules_json['clusterResourceRules-allowedExecutorCores'] }});
+  document.getElementById("recommended_driver_memory").setAttribute('value',{{ rules_json['clusterResourceRules-defaultDriverMemory'] }});
+  document.getElementById("recommended_num_executors").setAttribute('value',{{ rules_json['clusterResourceRules-defaultNumExecutors'] }});
+  document.getElementById("recommended_executor_memory").setAttribute('value',{{ rules_json['clusterResourceRules-defaultExecutorMemory'] }});
+  document.getElementById("recommended_executor_cores").setAttribute('value',{{ rules_json['clusterResourceRules-defaultExecutorCores'] }});
+  var checkbox_bool = "{{ rules_json['allow_users'] }}"
+  checkbox_bool = (checkbox_bool == 'True')
+ // alert({{ rules_json['allow_users'] }})
+  document.getElementById("allow_users").checked = checkbox_bool;
+  }
+</script>
+
+
+
+<h1 class="text-center my-1 mb-3">Cluster administration</h1>
+
+
+<form id="new-form" action="#" method="POST">
+    <div class="tab-content" id="nav-tabContent">
+        <div id="environment-tab" class="tab-pane fade show active" role="tabpanel">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="" onchange="">
+                        {{ form.csrf_token }}
+                        {% for field in form.clusterResourceRules %}
+                            {{ forms.renderField(field) }}
+                        {% endfor %}
+                    </div>
+                    <div class="" style="width: 350px; float:left; margin:15px;">
+                        Allow users to specify their own ressources while creating new kernels
+                    </div>
+                    <div class="col-10" style="width: 100px; float:left; margin:15px;">
+                        <input type="checkbox" id="allow_users" name="allow_users" value="Checked">
+                            <label for="allow_users_for"></label>
+                    </div>
+                    <div class="nav-pills">
+                        <input type="submit" value="Submit" class="btn btn-success my-1 float-right">                    </div>
+                    </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<div id="alert-success" class="row d-none">
+    <div class="col-1"></div>
+    <div class="alert alert-success col-10" role="alert">
+      <h4 class="alert-heading">Admin values changed successfully</h4>
+      <!--
+      <p>Please leave this browser window open while your file is still uploading.</p>
+      <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      -->
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endblock content %}
+

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ispark-webui-ingress
+  namespace: kubeyard
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "360"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "360"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "360"
+spec:
+  rules:
+  - host: <YOUR-HOST>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webui-ispark-helm-flask
+          servicePort: 80
+

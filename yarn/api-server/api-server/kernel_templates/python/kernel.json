@@ -1,0 +1,29 @@
+{
+  "language": "python",
+  "display_name": "Pyspark37-Cluster",
+  "metadata": {
+    "process_proxy": {
+      "class_name": "enterprise_gateway.services.processproxies.yarn.YarnClusterProcessProxy"
+    }
+  },
+  "env": {
+    "HADOOP_CONF_DIR": "/usr/bin/hadoop/etc/hadoop",
+    "SPARK_HOME": "/usr/lib/spark",
+    "SPARK_CONF_DIR": "usr/lib/spark/conf",
+    "PYSPARK_PYTHON": "/usr/local/share/jupyter/kernels/spark_python37/py37/bin/python",
+    "PYTHONPATH": "/usr/local/share/jupyter/kernels/spark_python37/py37/bin/python",
+    "SPARK_OPTS": "--master yarn --deploy-mode cluster --name ${KERNEL_ID:-ERROR__NO__KERNEL_ID} --conf spark.yarn.submit.waitAppCompletion=false --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=py37/py37/bin/python --conf spark.yarn.appMasterEnv.PATH=.py37/py37/bin:$PATH ${KERNEL_EXTRA_SPARK_OPTS} --conf spark.yarn.dist.archives=/usr/local/share/jupyter/kernels/spark_python37/py37.zip#py37 --driver-memory=1024M --num-executors=1 --executor-memory=1024M --executor-cores=1 ",
+    "LAUNCH_OPTS": ""
+  },
+  "argv": [
+    "/usr/local/share/jupyter/kernels/spark_python37/bin/run.sh",
+    "--RemoteProcessProxy.kernel-id",
+    "{kernel_id}",
+    "--RemoteProcessProxy.response-address",
+    "{response_address}",
+    "--RemoteProcessProxy.port-range",
+    "{port_range}",
+    "--RemoteProcessProxy.spark-context-initialization-mode",
+    "lazy"
+  ]
+}

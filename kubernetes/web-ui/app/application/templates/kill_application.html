@@ -1,0 +1,6 @@
+{% import "form_macros.html" as forms %}
+Are you sure you want to kill this application?
+<form id="kill-application-form" action="#" method="POST">
+    {{ form.csrf_token }}
+    <input type="hidden" id="application_id" name="application_id" value="{{ application_id }}">
+</form>

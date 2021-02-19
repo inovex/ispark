@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "helm-flask.fullname" . }}
+  labels:
+    app: {{ template "helm-flask.name" . }}
+    chart: {{ template "helm-flask.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "helm-flask.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "helm-flask.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: PORT
+            value: "{{ .Values.service.internalPort }}"
+          - name: EG_ADRESS
+            value: "{{ .Values.data.eg_adress }}"
+          - name: API_SERVER_ADRESS
+            value: "{{ .Values.data.api_server_adress }}"
+          - name: ARCHITECTURE
+            value: "{{ .Values.data.architecture }}"
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.internalPort }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.internalPort }}
+          resources:
+            {{ toYaml .Values.resources | indent 12 }}
+              {{- with .Values.nodeSelector }}
+      imagePullSecrets:
+  	- name: regcred
+      nodeSelector:
+        {{ toYaml . | indent 8 }}
+          {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

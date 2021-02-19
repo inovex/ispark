@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  gateway:
+    image: <YOUR-JEG-IMAGE:TAG>
+    container_name: gateway
+    network_mode: "host"
+    volumes:
+      - /usr/local/share/jupyter/kernels/:/usr/local/share/jupyter/kernels/
+      - /usr/lib/hadoop/etc/hadoop/yarn-site.xml:/usr/bin/hadoop/etc/hadoop/yarn-site.xml
+      - /usr/lib/hadoop/etc/hadoop/core-site.xml:/usr/bin/hadoop/etc/hadoop/core-site.xml
+      - /hadoop/yarn/:/hadoop/yarn/
+      - /usr/lib/spark/conf/spark-defaults.conf:/usr/lib/spark/conf/spark-defaults.conf
+      - /usr/lib/spark/conf/spark-env.sh:/usr/lib/spark/conf/spark-env.sh
+      - /usr/lib/spark/jars/:/usr/lib/spark/jars/
+      - /usr/local/share/google/dataproc/lib/:/usr/local/share/google/dataproc/lib/
+      - ~/masterarbeit-rafal/jupyter_enterprise_gateway_config.py:/tmp/jupyter_enterprise_gateway_config.py
+  api_server:
+    image: <YOUR-API-SERVER-IMAGE:TAG>
+    container_name: api_server
+    network_mode: "host"
+    environment:
+      - SPARK_HOME=/usr/lib/spark
+    volumes:
+      - /usr/local/share/jupyter/kernels:/usr/local/share/jupyter/kernels/ 
+      - /usr/lib/hadoop/etc/hadoop/:/usr/bin/hadoop/etc/hadoop 
+      - /usr/local/share/google/dataproc/lib/:/usr/local/share/google/dataproc/lib/ 
+      - ~/masterarbeit-rafal/jupyter_enterprise_gateway_config.py:/home/tmp/jupyter_enterprise_gateway_config.py

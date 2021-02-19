@@ -1,0 +1,68 @@
+proxy:
+  secretToken: <YOUR-TOKEN>
+  service:
+    type: NodePort
+
+hub:
+  extraConfig: |-
+    from kubespawner import KubeSpawner
+    from tornado import gen
+    import yaml
+
+    class CustomKubeSpawner(KubeSpawner):
+        def get_env(self):
+            env = super().get_env()
+
+            env['KG_HTTP_USER'] =  self.user.name
+            env['KERNEL_USERNAME'] =  self.user.name
+            env['KERNEL_ID'] = "lol"
+
+
+            return env
+    c.JupyterHub.spawner_class = CustomKubeSpawner
+    config = '/etc/jupyter/jupyter_notebook_config.py'
+    c.Spawner.start_timeout = 500
+
+singleuser:
+  defaultUrl: "/lab"
+  image:
+#    name: jupyter/datascience-notebook
+#    tag: latest
+    name: elyra/nb2kg
+    tag: 2.2.0
+  storage:
+    capacity: 10Gi
+#  storage:
+#    dynamic:
+#      storageClass: nfs-dynamic
+  extraEnv:
+    KG_HTTP_USER: Rafi
+    KERNEL_USERNAME: rafi
+#    KG_REQUEST_TIMEOUT: 60
+
+rbac:
+  enabled: true
+debug:
+  enabled: true
+
+
+auth:
+  type: dummy
+  dummy:
+    password: 'guest'
+  whitelist:
+    users:
+      - Rafal
+      - Gast
+      - Guest
+
+
+
+ingress:
+  enabled: false
+  hosts:
+      - <YOUR-HOST>
+  annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/ingress.class: "nginx"
+

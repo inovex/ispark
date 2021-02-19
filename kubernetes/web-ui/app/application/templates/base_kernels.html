@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}{% endblock content %}
+
+{% block pre_content %}
+<div class="wrapper">
+    <nav id="sidebar">
+
+
+    	<div class="sidebar-header">
+    		<h6>Available kernels</h6>
+    		<!--
+
+    		<button id="sidebarCollapse" class="btn active"><i class="fa fa-angle-double-left"></i></button>
+    		-->
+    	</div>
+
+		{% if connection_eg_success %}
+
+
+				<ul class="list-unstyled">
+				{% for kernel in available_kernels %}
+					<li>
+						<a href="{{ url_for('main_bp.show_kernel_details', kernel_folder_name = kernel[0]) }}">
+						{{ kernel[1] }}
+						</a>
+					</li>
+				{% endfor %}
+				</ul>
+
+
+		{% else %}
+			<ul>
+				<li>
+					<a>
+						No EG FOUND
+					</a>
+
+				</li>
+			</ul>
+		{% endif %}
+
+
+
+    </nav>
+
+    <div id="content-wrapper">
+		<div id="content">
+			{% import "flash_macros.html" as flash %}
+			{{ flash.show_messages() }}
+        	{% block inner_content %}
+        	{% endblock inner_content %}
+        </div>
+    </div>
+
+</div>  
+{% endblock pre_content %}

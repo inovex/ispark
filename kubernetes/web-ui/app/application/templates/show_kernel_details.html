@@ -1,0 +1,105 @@
+{% extends "base_kernels.html" %}
+{% block title %}Kernel Details{% endblock title %}
+
+{% block inner_content %}
+
+{{ super() }}
+
+
+<h1 class="my-3">{{ name }}</h1>
+<div>
+    <button type="button" class="btn btn-success" href="#" data-toggle="modal" data-target="#modal-modify-resources" data-driver-mem="{{ resources[0] }}" data-num-exec="{{ resources[1] }}"
+            data-exec-mem="{{ resources[2] }}" data-exec-cores="{{ resources[3] }}" data-folder="{{ name }}">Modify resources</button>
+    <button href="#" data-target="#modal-delete-kernel" data-toggle="modal"  type="button" class="btn btn-danger" data-folder="{{ name }}">Delete kernel</button>
+</div>
+
+<div class="row" >
+  <div class="column">
+      <h4 class="my-3">Resources</h4>
+    <div class="row">
+      {% for i in range(0, resources|length) %}
+        <div class="col-lg-8"> <b>{{ resources_labels[i] }}</b> </div>
+        <div class="col-lg-4">{{ resources[i] }}</div>
+
+        <div class="row"></div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row" >
+  <div class="column">
+      <h4 class="my-3">Environment</h4>
+    <div class="row">
+        <div class="col-lg-8"> <b>Language: </b> </div>
+        <div class="col-lg-4"> {{ env_libs_conda[0] }} </div>
+    </div>
+      <div class="row">
+        <div class="col-lg-8">  <b>Conda packages: </b> </div>
+        <div class="col-lg-4">  </div>
+    </div>
+
+      {% for i in range(1, env_libs_conda|length) %}
+      <div class="row">
+        <div class="col-lg-8">  {{ i }}  </div>
+        <div class="col-lg-4"> {{ env_libs_conda[i] }} </div>
+    </div>
+      {% endfor %}
+
+      <div class="row">
+        <div class="col-lg-8">  <b>PIP packages: </b> </div>
+        <div class="col-lg-4">  </div>
+    </div>
+
+      {% for i in range(0, env_libs_pip|length-1) %}
+      <div class="row">
+        <div class="col-lg-8">  {{ i+1 }}  </div>
+        <div class="col-lg-4"> {{ env_libs_pip[i] }} </div>
+    </div>
+      {% endfor %}
+</div>
+
+
+    <!-- modify resources -->
+<div id="modal-modify-resources" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modify resources</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Please wait...</p>
+      </div>
+       <div class="modal-footer">
+        <button href="."  id="modal-modify-resources-button" data-driver-mem="{{ resources[0] }}" data-num-exec="{{ resources[1] }}"
+            data-exec-mem="{{ resources[2] }}" data-exec-cores="{{ resources[3] }}" data-folder="{{ name }}" type="button" class="btn btn-success">Save</button>
+       </div>
+    </div>
+  </div>
+</div>
+
+        <!-- delete kernel -->
+<div id="modal-delete-kernel" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Kernel</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Please wait...</p>
+      </div>
+       <div class="modal-footer">
+        <button href="http://ispark.emq.idcp.inovex.io/cluster"  id="modal-delete-kernel-button" data-folder="{{ name }}" class="btn btn-success">Delete</button>
+       </div>
+    </div>
+  </div>
+</div>
+
+{% endblock inner_content %}

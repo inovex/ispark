@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    {% block metas %}{% endblock metas %}
+    <title>{% block title %} iSpark - {% endblock title %}</title>
+
+   <!-- <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="/static/style/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style/bootstrap/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="/static/style/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/static/style/style.css">
+    <link rel="stylesheet" href="/static/style/style.css">
+
+    {% block flask_includes %}
+    {% endblock flask_includes %}
+
+    {% block css %} {% endblock css %}
+</head>
+<body>
+    {% set navigation_bar = [
+      ('/cluster', 'cluster', 'Cluster'),
+      ('/add_kernel', 'add_kernel', 'Add JupyterEG Kernel'),
+      ('/admin', 'admin', 'Admin')] -%}
+    {% set active_page = active_page|default('home') -%}
+
+
+
+<nav id="topnav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/"><h1>iSpark</h1></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% for href, id, caption in navigation_bar %}
+        <li class="nav-item {% if id == active_page %} active{% endif %}">
+          <a class="nav-link" href="{{ href|e }}">{{ caption|e }}</a>
+        </li>
+      {% endfor %}
+        <li class="nav-item {% if id == active_page %} active{% endif %}">
+             <a href="http://localhost:8000" target="_blank" class="btn btn-primary">Start Jupyter</a>
+        </li>
+    </ul>
+  </div>
+
+    <div>
+        <ul class="navbar-nav mr-auto">
+            <li style="list-style-type:none;">
+                 <a class="nav-link">  Logged as: {{ get_username() }} <a/>
+            </li>
+            <li style="list-style-type:none;">
+                <a href="/logout" class="btn btn-primary">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{% block pre_content %}{% endblock pre_content %}
+
+<div class="container-fluid">
+
+{% block content %}
+{% import "flash_macros.html" as flash %}
+{{ flash.show_messages() }}
+
+{% endblock content %}
+</div>
+<footer>
+    <script src="/static/script/jquery-3.4.1.min.js"></script>
+    <script src="/static/script/popper.min.js"></script>
+    <script src="/static/script/bootstrap.bundle.min.js"></script>
+    <script src="/static/script/moment-with-locales.min.js"></script>
+    <script src="/static/script/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/static/script/script.js"></script>
+    {% block config %} {% endblock config %}
+    {% block scripts %} {% endblock scripts %}
+    {% block renderer %} {% endblock renderer %}
+</footer>
+</body>
+</html>
