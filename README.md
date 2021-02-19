@@ -23,7 +23,10 @@ The JupyterHub together with single Jupyter-Lab instances are running within a K
 3. Both clusters should be able to communicate with each other. E.g. by placing them in the same network. It is sufficient that the Edge node is reachable from the Kubernetes cluster. Allowing the Kubernetes pod IP-range for in- and out-going traffic should be enough.
 
 4. Local terminal with *kubectl* installed and connected with correct Kuberenetes cluster. *Helm* should be installed as well.  Ubuntu as OS is recommended, no guarantee for Windows. 
+
 5. While building images of Jupyter Enterprise Gateway and the API-server, it is imporant to mount proper paths. They should lead to the actual Hadoop and Spark files residing on the Hadoop Cluster. This is discussed in *Bulding Images* more in detail. 
+
+6. Docker credentials and registry 
 
 
 ## Content
@@ -40,9 +43,9 @@ The Python files of the Web-UI are located in */kubernetes/web-ui/app/applicatio
 
 ### Web-UI
 
- 1. Replace the build and push registries by desired registries in /software/kubernetes/web-ui/deploy_local_code.sh*. It should look like this <registry:tag>
+ 1. Replace the build and push registries by desired registries in *kubernetes/web-ui/deploy_local_code.sh*. It should look like this <registry:tag>
 2. Execute the script from step 1 (sudo migh be needed). This builds and puhses the Web-UI image to the desired registry.
- 3. Reference the pushed image in the Helm chart of the Web-UI: */software/kubernetes/web-ui/helm-flask/values.yaml* (line 8-9). Again in the form: <registry:tag>
+ 3. Reference the pushed image in the Helm chart of the Web-UI: *kubernetes/web-ui/helm-flask/values.yaml* (line 8-9). Again in the form: <registry:tag>
 
 ### API-server
  1.  Execute following command from */yarn/api-server* (provide you own registry and tag):
@@ -86,10 +89,12 @@ sudo docker build \
 
 ## Deployment on Kubernetes 
 
-1. Provide your Docker credentials in */software/deployment_k8s.sh* (line 42)
-2.  Execute *deployment_k8s.sh* script with the address of the YARN-Edge node as input parameter, e.g. *bash deployment_k8s.sh 13.23.127.254*
-3. You will be asked for your sudo password. Provide it.
-4. Depending on your OS, it may happen, that the wait commands from the script does not work and you will get a *tiller not ready* error. In this case wait 20 seconds and try again, it should work now.
+1. In *kubernetes/jupyterhub/config.yaml* provide your own secret token (e.g. by *openssl rand -hex 32*)
+2. In *kubernetes/web-ui/start.sh* provide your own SECRET_KEY (e.g. *import os; print(os.urandom(24).hex())*)
+3. Provide your Docker credentials in *deployment_k8s.sh* (line 42)
+4. Execute *deployment_k8s.sh* script with the address of the YARN-Edge node as input parameter, e.g. *bash deployment_k8s.sh 13.23.127.254*
+5. You will be asked for your sudo password. Provide it.
+6. Depending on your OS, it may happen, that the wait commands from the script does not work and you will get a *tiller not ready* error. In this case wait 20 seconds and try again, it should work now.
 
 ## Deployment on Hadoop 
 1. Go to the Edge node (e.g. via SSH).
@@ -108,12 +113,12 @@ sudo docker build \
 3.  Restart YARN: *sudo systemctl restart hadoop-yarn-resourcemanager.service*
 4.  Pull the repository.
 5. Referene the Jupyter Enterprise Gateway and API-server images in *docker-compose.yml* (line 5 and 19)
-6. Provide Docker credentials in */software/deployment_yarn_docker.sh* (line 18) and again the images, as in step 5 (line 21 and 22)
+6. Provide Docker credentials in *deployment_yarn_docker.sh* (line 18) and again the images, as in step 5 (line 21 and 22)
 7. Execute the *deployment_yarn_docker.sh* script
 
 ## Accessing the platform
 
-The ingress resources are available, however, they are left out (out-commented or deactivated), since setting ingress is very specific and depending e.g. on available host etc. If you want to use it, activate ingress for the JupyterHub (*config.yml*) and for the Web-UI (*values.yml*) and provide your own configuration.
+The ingress resources are available, however, they are left out (deactivated), since setting ingress is very specific and depending e.g. on available host etc. If you want to use it, deploy the ingress-controller (*kubernetes/ingress-nginx*), activate ingress for the JupyterHub (*config.yml*) and for the Web-UI (*values.yml*) and deploy the ingress-resource for the web-ui (*kubernetes/ingress-resources)*. You can do this by extending the deployment script for k8s.
 
 You can, however, access the platform with port-forwarding. From the local terminal (with *kubectl*), you can port-forward the Web-UI and the JupyterHub as presented:
 
@@ -126,3 +131,7 @@ While visting the Web-UI, you need to log-in. For testing pourposes,  you can us
 
 Username: *Guest*, PW: *guest* (this can also be used for logging in into JupyterHub)
 Username: *Admin*, PW: *admin*  (the admin user is more privileged) 
+
+Kernels:
+
+As the default kernels are not inlcuded (too heavy), you can simply create one from the web-ui once deployed. 
